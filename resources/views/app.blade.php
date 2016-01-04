@@ -13,7 +13,21 @@
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+<script src="//cdn.jsdelivr.net/satellizer/0.13.3/satellizer.min.js"></script>
 <script src="/js/app.js"></script>
+<script src="/js/ga.js"></script>
+<script>
+	try {
+		@if (Session::has('js_flash'))
+			if (typeof lara_js_flash === "function") {
+				lara_js_flash('<% Session::get('js_flash') %>');
+			}
+		@endif
+	}catch(e) {
+		console.log(e);
+	}
+</script>
 <?php /*
 <script type="text/javascript" src="/js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>

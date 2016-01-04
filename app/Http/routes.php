@@ -11,6 +11,7 @@
 |
 */
 
+/*
 Route::get('/', function () {
 	if(Auth::check()) {
 		return redirect('home');
@@ -18,6 +19,9 @@ Route::get('/', function () {
     	return view('welcome');
 	}
 });
+*/
+
+Route::get('/', function () {    return view('index'); });
 
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
@@ -37,5 +41,12 @@ Route::get('search', 'searchController@index');
 
 //Route::get('administration',function () { return view('administration/index'); } );
 Route::get('administration','administration@index' );
+
+Route::group(['prefix' => 'api'], function()
+{
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+	 Route::post('register', 'AuthenticateController@register');
+});
 
 

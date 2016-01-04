@@ -71,7 +71,17 @@ class AuthController extends Controller
 			});
 		} 
 
+		\Session::flash('js_flash', 'track_register');
+
 		return $res;
 		
     }
+
+	public function authenticated()
+	{
+		\Session::flash('js_flash', 'track_login');
+		
+		return redirect($this->redirectPath());
+	}
+
 }
