@@ -1,0 +1,15 @@
+            <div class="content">
+                <h1 class="ng-cloak">Manage Your {{itemType}}s</h1>
+                <div class="alert alert-success ng-cloak" role="alert" ng-show="message">{{message}}</div>
+                <div class="alert alert-warning ng-cloak" role="alert" ng-show="warning">{{warning}}</div>
+                <div ng-show="items"> 
+                <ul  ng-repeat="(i,item) in items">
+                	<li><a ng-click="editItem(i)"  class="ng-cloak" style="cursor: pointer;">{{item.name}}</a> <span ng-show="item.duedate">{{ item.duedate+'Z' | date:'MM/dd/yyyy @ h:mma'  }}</span></li>
+                </ul>
+                <div style="height:12px;"></div>
+                <form ng-submit="newItem()">
+                	<input name="name" ng-model="newField.name">
+                	<button class="btn btn-primary" type="submit">New {{itemType}}</button>
+                </form>
+                </div>
+            </div>
