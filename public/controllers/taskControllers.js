@@ -1,12 +1,22 @@
 (function() {
 
-    var TasksController = function($scope, $http,$uibModal ) {
+    var TasksController = function($scope, $http,$uibModal,$auth,$location ) {
     	$scope.itemType= 'Task';
     	$scope.newField = {'name':''};
     	
-    	
+    	var checkToken = function() {
+    		if(!$auth.isAuthenticated()) {
+			  	$location.path('login');
+			  	return false;
+			} else { 
+				return true; 
+			}
+    	}
 
 		var getAll = function() {
+		  if(!checkToken()) {
+		  	return;
+		  }
     	  return $http.get("/tasks")
     	    .then(function(response) {
     	    	console.log(response);
@@ -20,6 +30,9 @@
     	}
     	
     	$scope.newItem = function() {
+		  if(!checkToken()) {
+		  	return;
+		  }
     		delete $scope.warning;
     		if(!$scope.newField.name) {
     			$scope.warning = 'New Task was blank';
@@ -48,6 +61,9 @@
       				},
         			item: function () {
 		          		return item;
+        			},
+        			checkToken: function() {
+        				return checkToken;
         			}
       		}
     		});
@@ -67,7 +83,7 @@
 
     }
     
-    var ItemEditorController = function($scope, $http,$modalInstance,title,item,$uibModal ) {
+    var ItemEditorController = function($scope, $http,$modalInstance,title,item,$uibModal,$auth,$location ) {
     	$scope.title = title;
     	$scope.id = item.id;
     	delete item.$$hashKey;
@@ -91,6 +107,11 @@
   		};
   		
   		$scope.submit = function () {
+  			if(!$auth.isAuthenticated()) {
+  				$modalInstance.dismiss('cancel');
+			  	$location.path('login');
+			  	return;
+			}
   			if($scope.item.id) {
   				return $http.put("/tasks/"+$scope.item.id,$scope.item)
     	    	.then(function(response) {

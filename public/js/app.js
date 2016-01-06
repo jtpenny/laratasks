@@ -20,20 +20,22 @@ var app = angular.module("laratasks", ['ui.bootstrap','ngRoute','satellizer']);
 	      	templateUrl: 'views/tasks.html',
 	      	controller: 'TasksController'
 	      })
-	      .when('/photo/:id', {
-	        templateUrl: 'views/detail.html',
-	        controller: 'DetailCtrl'
-	      })
 	      .otherwise('/');
 	      
 	       $authProvider.loginUrl = '/api/authenticate';
 	       $authProvider.signupUrl = '/api/register';
 	  });
 	  
-	  app.run(function($rootScope, $window, $auth) {
+	  app.run(function($rootScope, $window, $location,$auth) {
 	    if ($auth.isAuthenticated()) {
 	      $rootScope.currentUser = JSON.parse($window.localStorage.currentUser);
     	}
+    	$rootScope.$on('$routeChangeSuccess', function() {
+            	if (!$window.ga) {
+                	return;
+               }
+               $window.ga('send', 'pageview', { page: $location.path() });
+        	});
   	  });
 
     

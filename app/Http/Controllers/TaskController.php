@@ -23,15 +23,9 @@ class TaskController extends Controller
 	{
     	$this->middleware('jwt.auth');
 	} 
-	     
-    public function admin()
-    {
-		$tasks = $this->_getAllTasks();
-        return view('tasks',array('items'=>$tasks));
-    }
 
     /**
-     * Show the form for creating a new resource.
+     * Return All Tasks for a user.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,6 +35,10 @@ class TaskController extends Controller
 		$tasks = $this->_getAllTasks();
 		return response()->json(['status'=>'success','count'=>count($tasks),'items'=>$tasks]);
 	 }
+	 
+	 /*
+	  * Create a task
+	  */ 
 	 
     public function store(Request $request)
     {
@@ -53,34 +51,20 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+	 * @todo - May need this in the future
      */
     public function show($id)
     {
-        //
+        
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
 
     /**
-     * Update the specified resource in storage.
+     * Update a task by ID.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -98,7 +82,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the Task.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -108,6 +92,10 @@ class TaskController extends Controller
 		TaskModel::destroy($id);
        	return response()->json(array('status'=>'success'));
     }
+	
+	/*
+	 * Get All Tasks for a user (by JWT Token)
+	 */
 	
 	private function _getAllTasks() {
 		$tasks = TaskModel::where('userID',$this->getAuthenticatedUser()->id)
@@ -129,7 +117,7 @@ class TaskController extends Controller
 	    try {
 	
 	        if (! $user = JWTAuth::parseToken()->authenticate()) {
-	            return response()->json(['user_not_found'], 404);
+	            return response()->json(['user_not_found'], $e->getStatusCode());
 	        }
 	
 	    } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
